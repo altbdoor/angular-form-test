@@ -8,6 +8,7 @@ angular.module('NgFormTest', [
 	'text-mask',
 	'moment-picker',
 	'LocalForageModule',
+	'selector',
 ])
 
 .config([

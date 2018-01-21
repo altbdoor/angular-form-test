@@ -6,6 +6,7 @@
     "angular-moment-picker": "^0.10.1",
     "angular-resource": "1.6.x",
     "angular-route": "1.6.x",
+    "angular-selector": "1.6.x",
     "angular-translate": "2.17.x",
     "angular1-text-mask": "6.0.x",
     "bootstrap": "4.0.x",

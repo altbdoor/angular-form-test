@@ -17,7 +17,7 @@ angular.module('NgFormTest')
 			'partials/main_form/_step2.html?v=' + cachebust,
 		]
 		
-		self.stepActiveIndex = 0
+		self.stepActiveIndex = 1
 		self.isReady = true
 		
 		self.showNextStep = function () {
@@ -48,13 +48,6 @@ angular.module('NgFormTest')
 	function ($rootScope, MainFormService) {
 		var self = this
 		
-		self.vm = {
-			firstName: '',
-			lastName: '',
-			dateOfBirth: '',
-			emailAddress: '',
-		}
-		
 		MainFormService.getStepData(1).then(function (data) {
 			if (data) {
 				self.vm = data
@@ -79,12 +72,40 @@ angular.module('NgFormTest')
 ])
 
 .controller('ItemController', [
-	'$rootScope',
-	function ($rootScope) {
+	'$rootScope', 'Vehicle',
+	function ($rootScope, Vehicle) {
 		var self = this
+		
+		self.vm = {
+			brand: '',
+			model: '',
+		}
+		
+		self.opt = {
+			brand: [],
+			model: [],
+		}
 		
 		self.goBack = function () {
 			$rootScope.$emit('main-form:show-previous')
 		}
+		
+		self.brandChange = function () {
+			self.opt.model = []
+			
+			Vehicle.$getModels({brand: self.vm.brand}).then(function (data) {
+				self.opt.model = data
+			})
+		}
+		
+		Vehicle.$query().then(function (data) {
+			var optBrand = []
+			
+			for (var i=0; i<data.length; i++) {
+				optBrand.push(data[i]['brand'])
+			}
+			
+			self.opt.brand = optBrand
+		})
 	}
 ])
