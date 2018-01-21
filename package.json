@@ -8,7 +8,9 @@
     "angular-translate": "2.17.x",
     "angular1-text-mask": "6.0.x",
     "bootstrap": "4.0.x",
+    "clean-css-cli": "4.1.10",
     "localforage": "1.5.x",
-    "simple-line-icons": "2.4.x"
+    "simple-line-icons": "2.4.x",
+    "uglify-js": "3.3.8"
   }
 }
