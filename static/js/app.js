@@ -1,7 +1,8 @@
 angular.module('NgFormTest', [
 	'ngRoute',
 	'ngMessages',
-	
+	'ngResource',
+
 	'pascalprecht.translate',
 	
 	'text-mask',
