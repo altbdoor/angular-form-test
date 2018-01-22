@@ -8,30 +8,17 @@
 			<div class="col-12 col-md">
 				<div class="form-group">
 					<label>Car Brand</label>
-					<select selector require
-						placeholder="Select a car brand"
-						remove-button="false"
-						model="iCtrl.vm.brand"
-						options="iCtrl.opt.brand"
-						></select>
 					
-					<!-- <select class="form-control" name="brand" ng-model="iCtrl.vm.brand" ng-change="iCtrl.brandChange()">
-						<option ng-repeat="b in iCtrl.opt.brand" value="{{ b }}">{{ b }}</option>
-					</select> -->
-					
-					<!-- <input type="text" name="brand" class="form-control" required
-						ng-model="iCtrl.vm.brand"
-						ng-minlength="5"
-						ng-maxlength="100"
-						ng-pattern="/^[A-z ]+$/"
-						ng-custom-class-on-error="is-invalid">
+					<select chosen ng-model="iCtrl.vm.brand">
+						<option ng-repeat="item in iCtrl.opt.brand" value="{{ item }}">{{ item }}</option>
+					</select>
 					
 					<div class="invalid-feedback" ng-messages="form.brand.$error">
 						<div ng-message="required">First Name is required</div>
 						<div ng-message="minlength">First Name must be at least 5 characters</div>
 						<div ng-message="maxlength">First Name must be at most 100 characters</div>
 						<div ng-message="pattern">Only alphabets and spaces allowed</div>
-					</div> -->
+					</div>
 				</div>
 			</div>
 			<div class="col-12 col-md">

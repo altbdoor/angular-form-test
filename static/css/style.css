@@ -1,27 +1,21 @@
-.selector-container {
-	color: #212529;
+.chosen-container {
+	display: block;
+	width: 100% !important;
 }
-.selector-container > .selector-input {
-	padding: .375rem .75rem;
-	height: calc(2.25rem + 2px);
+
+.chosen-container-single .chosen-single div b,
+.chosen-container-single .chosen-search input[type="text"] {
 	background-image: none;
-	background-color: transparent;
-	border-color: #ced4da;
-	box-shadow: none;
-	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.selector-container.open > .selector-input {
-	border-color: #80bdff;
-	outline: 0;
-	box-shadow: 0 0 0 .2rem rgba(0, 123, 255, 0.3);
-}
-
-.selector-container > .selector-dropdown > .selector-option {
-	padding: .375rem .75rem;
-	color: #212529;
-}
-
-.selector-container > .selector-dropdown > .selector-option.active {
-	background-color: rgba(0, 0, 0, 0.1);
+.chosen-container-single > .chosen-single > div > b {position: relative;}
+.chosen-container-single > .chosen-single > div > b:before {
+	position: absolute;
+	content: " ";
+	top: 50%;
+	left: 0;
+	margin-top: -3px;
+	border-style: solid;
+	border-color: #444 transparent transparent;
+	border-width: 6px 5px 0;
 }

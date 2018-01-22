@@ -8,12 +8,13 @@ angular.module('NgFormTest', [
 	'text-mask',
 	'moment-picker',
 	'LocalForageModule',
-	'selector',
+	// 'selector',
+	'localytics.directives',
 ])
 
 .config([
 	'$routeProvider', '$translateProvider', 'momentPickerProvider',
-	function ($routeProvider, $translateProvider, momentPickerProvider) {
+	function ($routeProvider, $translateProvider, momentPickerProvider, chosenProvider) {
 		// ng route definitions
 		$routeProvider.otherwise({
 			redirectTo: '/home',
@@ -43,6 +44,13 @@ angular.module('NgFormTest', [
 			today: true,
 			leftArrow: '<i class="icon-arrow-left"></i>',
 			rightArrow: '<i class="icon-arrow-right"></i>',
+		})
+		
+		// chosen jquery
+		chosenProvider.setOption({
+			no_results_text: 'There is no results!',
+			placeholder_text_multiple: 'Choose one or more!',
+			placeholder_text_single: 'Select an option',
 		})
 	}
 ])
