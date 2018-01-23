@@ -13,8 +13,8 @@ angular.module('NgFormTest')
 		var self = this
 		
 		self.stepTemplateList = [
-			'partials/main_form/_step1.html?v=' + cachebust,
-			'partials/main_form/_step2.html?v=' + cachebust,
+			'static/templates/main_form/_step1.html',
+			'static/templates/main_form/_step2.html',
 		]
 		
 		self.stepActiveIndex = 1

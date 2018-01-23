@@ -13,23 +13,23 @@ angular.module('NgFormTest', [
 ])
 
 .config([
-	'$routeProvider', '$translateProvider', 'momentPickerProvider', 'chosenProvider',
-	function ($routeProvider, $translateProvider, momentPickerProvider, chosenProvider) {
+	'$routeProvider', '$httpProvider', '$translateProvider', 'momentPickerProvider', 'chosenProvider',
+	function ($routeProvider, $httpProvider, $translateProvider, momentPickerProvider, chosenProvider) {
 		// ng route definitions
 		$routeProvider.otherwise({
 			redirectTo: '/home',
 		})
 		.when('/home', {
-			templateUrl: 'partials/home/page.html?v=' + cachebust,
+			templateUrl: 'static/templates/home/page.html',
 		})
 		.when('/form', {
-			templateUrl: 'partials/main_form/page.html?v=' + cachebust,
+			templateUrl: 'static/templates/main_form/page.html',
 		})
 		
 		// use a static loader
 		$translateProvider.useStaticFilesLoader({
 			prefix: 'static/locale/',
-			suffix: '.json?v=' + cachebust,
+			suffix: '.json',
 		})
 		$translateProvider.preferredLanguage('en')
 		
@@ -52,6 +52,9 @@ angular.module('NgFormTest', [
 			placeholder_text_multiple: 'Choose one or more!',
 			placeholder_text_single: 'Select an option',
 		})
+		
+		// push our cache buster
+		$httpProvider.interceptors.push('CacheBustService');
 	}
 ])
 

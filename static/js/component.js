@@ -1,7 +1,7 @@
 angular.module('NgFormTest')
 
 .component('stepFormButtons', {
-	templateUrl: 'partials/main_form/buttons.html?v=' + cachebust,
+	templateUrl: 'static/partials/buttons.html',
 	bindings: {
 		showPrevious: '<',
 		showNext: '<',

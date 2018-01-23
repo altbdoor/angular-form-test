@@ -21,3 +21,15 @@ angular.module('NgFormTest')
 		}
 	}
 ])
+
+// .directive('emailField', [
+// 	function () {
+// 		restrict: 'E',
+// 		require: 'ngModel',
+// 		scope: {
+// 			ngModel: '=',
+// 			options: '='
+// 		},
+		
+// 	}
+// ])

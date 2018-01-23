@@ -5,6 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Angular Form Test</title>
 	
+	<script>document.write('<base href="'+document.location+'" />')</script>
+	
 	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="node_modules/angular/angular-csp.css">
 	
@@ -13,11 +15,11 @@
 	<link rel="stylesheet" href="node_modules/bootstrap4-chosen/bootstrap4-chosen.css">
 	
 	<link rel="stylesheet" href="static/css/style.css">
+	
 </head>
 <body ng-app="NgFormTest" ng-controller="RootController as rootCtrl" style="overflow-y: scroll;">
 	<ng-view></ng-view>
 	
-	<script>var cachebust = parseInt(Date.now() / 60000)</script>
 	<script src="node_modules/angular/angular.js"></script>
 	<script src="node_modules/angular-route/angular-route.js"></script>
 	<script src="node_modules/angular-messages/angular-messages.js"></script>
