@@ -7,42 +7,21 @@ arg1="$1"
 
 echo "> Concatenating"
 css_path="static/css/pack.css"
-css_files=(
-	"node_modules/bootstrap/dist/css/bootstrap.min.css"
-	"node_modules/angular/angular-csp.css"
-	
-	"node_modules/angular-moment-picker/dist/angular-moment-picker.min.css"
-	"node_modules/simple-line-icons/css/simple-line-icons.css"
-)
+css_files=$(grep 'href="node_modules' index.html | sed -e 's/.*href="//' -e 's/">//')
 
 js_path="static/js/pack.js"
-js_files=(
-	"node_modules/angular/angular.js"
-	"node_modules/angular-route/angular-route.js"
-	"node_modules/angular-messages/angular-messages.js"
-	
-	"node_modules/angular-translate/dist/angular-translate.min.js"
-	"node_modules/angular-translate/dist/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"
-	
-	"node_modules/angular1-text-mask/dist/angular1TextMask.js"
-	
-	"node_modules/moment/min/moment-with-locales.min.js"
-	"node_modules/angular-moment-picker/dist/angular-moment-picker.min.js"
-	
-	"node_modules/localforage/dist/localforage.min.js"
-	"node_modules/angular-localforage/dist/angular-localForage.min.js"
-)
+js_files=$(grep 'src="node_modules' index.html | sed -e 's/.*src="//' -e 's/">.*//')
 
 > "$css_path"
 > "$js_path"
 
-for i in "${css_files[@]}"; do
-	cat "$i" >> "$css_path"
-done
+while read -r line ; do
+	cat "$line" >> "$css_path"
+done < <(echo "$css_files")
 
-for i in "${js_files[@]}"; do
-	cat "$i" >> "$js_path"
-done
+while read -r line ; do
+	cat "$line" >> "$js_path"
+done < <(echo "$js_files")
 
 echo "> Stripping source map"
 sed -i -e '/\/\*# sourceMappingURL.*/d' "$css_path"
