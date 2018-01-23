@@ -13,7 +13,7 @@ angular.module('NgFormTest', [
 ])
 
 .config([
-	'$routeProvider', '$translateProvider', 'momentPickerProvider',
+	'$routeProvider', '$translateProvider', 'momentPickerProvider', 'chosenProvider',
 	function ($routeProvider, $translateProvider, momentPickerProvider, chosenProvider) {
 		// ng route definitions
 		$routeProvider.otherwise({
