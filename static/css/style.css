@@ -19,3 +19,11 @@
 	border-color: #444 transparent transparent;
 	border-width: 6px 5px 0;
 }
+
+.chosen-container-single > .chosen-single {
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.chosen-container-single.chosen-container-active > .chosen-single {
+	box-shadow: 0 0 0 .2rem rgba(0, 123, 255, 0.3);
+	border-color: #80bdff;
+}
