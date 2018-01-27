@@ -125,13 +125,13 @@ angular.module('NgFormTest')
 			
 			for (var i=0; i<data.length; i++) {
 				optBrand.push({
-                    'id': data[i]['id'],
-                    'name': data[i]['brand'],
-                })
+					'id': data[i]['id'],
+					'name': data[i]['brand'],
+				})
 			}
 			
 			vm.opt.brand = optBrand
-            console.log(optBrand)
+			console.log(optBrand)
 		})
 	}
 ])
