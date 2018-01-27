@@ -46,55 +46,77 @@ angular.module('NgFormTest')
 .controller('PersonalDetailsController', [
 	'$rootScope', 'MainFormService',
 	function ($rootScope, MainFormService) {
-		var self = this
+		var vm = this
 		
-		MainFormService.getStepData(1).then(function (data) {
-			if (data) {
-				self.vm = data
-			}
-		})
-		
-		self.submit = function (form) {
-			if (form.$valid) {
-				MainFormService.setStepData(1, self.vm)
-				$rootScope.$emit('main-form:show-next')
-			}
-			
-		}
-		
-		self.momentPicker = {
+		vm.momentPicker = {
 			dateOfBirth: {
 				max: moment(),
 				min: moment().subtract(80, 'years')
 			}
 		}
+		
+		vm.submit = vmFormSubmit
+		
+		var formKeys = [
+			'firstName',
+			'lastName',
+			'dateOfBirth',
+			'emailAddress',
+		]
+		
+		init()
+		
+		// ========================================
+		
+		function init () {
+			MainFormService.getStepData(1).then(function (data) {
+				if (data) {
+					for (var key in data) {
+						vm[key] = data[key]
+					}
+				}
+			})
+		}
+		
+		function vmFormSubmit (form) {
+			if (form.$valid) {
+				var formData = {}
+				for (var i=0; i<formKeys.length; i++) {
+					formData[formKeys[i]] = vm[formKeys[i]]
+				}
+				
+				MainFormService.setStepData(1, formData)
+				$rootScope.$emit('main-form:show-next')
+			}
+			
+		}
+		
 	}
 ])
 
-.controller('ItemController', [
+.controller('VehicleDetailsController', [
 	'$rootScope', 'Vehicle',
 	function ($rootScope, Vehicle) {
-		var self = this
+		var vm = this
 		
-		self.vm = {
-			brand: '',
-			model: '',
-		}
+		vm.brand = ''
+		vm.model = ''
 		
-		self.opt = {
+		vm.opt = {
 			brand: [],
 			model: [],
 		}
 		
-		self.goBack = function () {
+		vm.goBack = function () {
 			$rootScope.$emit('main-form:show-previous')
 		}
 		
-		self.brandChange = function () {
-			self.opt.model = []
+		vm.brandChange = function () {
+			vm.opt.model = []
+			console.log('asd')
 			
-			Vehicle.$getModels({brand: self.vm.brand}).then(function (data) {
-				self.opt.model = data
+			Vehicle.$getModels({brand: vm.brand}).then(function (data) {
+				vm.opt.model = data
 			})
 		}
 		
@@ -102,10 +124,14 @@ angular.module('NgFormTest')
 			var optBrand = []
 			
 			for (var i=0; i<data.length; i++) {
-				optBrand.push(data[i]['brand'])
+				optBrand.push({
+                    'id': data[i]['id'],
+                    'name': data[i]['brand'],
+                })
 			}
 			
-			self.opt.brand = optBrand
+			vm.opt.brand = optBrand
+            console.log(optBrand)
 		})
 	}
 ])

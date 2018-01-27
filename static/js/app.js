@@ -2,19 +2,32 @@ angular.module('NgFormTest', [
 	'ngRoute',
 	'ngMessages',
 	'ngResource',
+	'ngSanitize',
 
 	'pascalprecht.translate',
 	
 	'text-mask',
 	'moment-picker',
 	'LocalForageModule',
-	// 'selector',
-	'localytics.directives',
+	'ui.select',
+])
+
+.factory('CacheBustService', [
+	function () {
+		return {
+			request: function (config) {
+				if (config.url.indexOf('templates') !== -1 || config.url.indexOf('partials') !== -1) {
+					config.url += (config.url.indexOf('?') === -1 ? '?' : '&') + 'v=' + parseInt(Date.now() / 1000)
+				}
+				return config
+			}
+		}
+	}
 ])
 
 .config([
-	'$routeProvider', '$httpProvider', '$translateProvider', 'momentPickerProvider', 'chosenProvider',
-	function ($routeProvider, $httpProvider, $translateProvider, momentPickerProvider, chosenProvider) {
+	'$routeProvider', '$httpProvider', '$translateProvider', 'momentPickerProvider',
+	function ($routeProvider, $httpProvider, $translateProvider, momentPickerProvider) {
 		// ng route definitions
 		$routeProvider.otherwise({
 			redirectTo: '/home',
@@ -44,13 +57,6 @@ angular.module('NgFormTest', [
 			today: true,
 			leftArrow: '<i class="icon-arrow-left"></i>',
 			rightArrow: '<i class="icon-arrow-right"></i>',
-		})
-		
-		// chosen jquery
-		chosenProvider.setOption({
-			no_results_text: 'There is no results!',
-			placeholder_text_multiple: 'Choose one or more!',
-			placeholder_text_single: 'Select an option',
 		})
 		
 		// push our cache buster

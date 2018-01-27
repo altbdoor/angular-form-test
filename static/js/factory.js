@@ -1,18 +1,5 @@
 angular.module('NgFormTest')
 
-.factory('CacheBustService', [
-	function () {
-		return {
-			request: function (config) {
-				if (config.url.indexOf('templates') !== -1 || config.url.indexOf('partials') !== -1) {
-					config.url += (config.url.indexOf('?') === -1 ? '?' : '&') + 'v=' + parseInt(Date.now() / 60000)
-				}
-				return config
-			}
-		}
-	}
-])
-
 .factory('MainFormService', [
 	'$localForage',
 	function ($localForage) {
