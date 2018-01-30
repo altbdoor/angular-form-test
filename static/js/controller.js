@@ -112,10 +112,16 @@ angular.module('NgFormTest')
 		}
 		
 		vm.brandChange = function () {
+			vm.model = ''
 			vm.opt.model = []
-			console.log('asd')
 			
-			Vehicle.$getModels({brand: vm.brand}).then(function (data) {
+			Vehicle.$getModels({name: vm.brand}).then(function (data) {
+				for (var i=0; i<data.length; i++) {
+					data[i] = {
+						'name': data[i]
+					}
+				}
+				
 				vm.opt.model = data
 			})
 		}
@@ -131,7 +137,6 @@ angular.module('NgFormTest')
 			}
 			
 			vm.opt.brand = optBrand
-			console.log(optBrand)
 		})
 	}
 ])
