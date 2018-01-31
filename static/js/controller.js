@@ -8,45 +8,53 @@ angular.module('NgFormTest')
 ])
 
 .controller('MainFormController', [
-	'$rootScope',
-	function ($rootScope) {
+	'$rootScope', '$window',
+	function ($rootScope, $window) {
 		var self = this
 		
 		self.stepTemplateList = [
 			'static/templates/main_form/_step1.html',
 			'static/templates/main_form/_step2.html',
+			'static/templates/main_form/_step3.html',
 		]
 		
-		self.stepActiveIndex = 1
+		self.stepActiveIndex = 2
 		self.isReady = true
 		
-		self.showNextStep = function () {
+		self.goNextStep = function () {
 			self.stepActiveIndex = Math.min(self.stepActiveIndex + 1, self.stepTemplateList.length)
 		}
 		
-		self.showPreviousStep = function () {
+		self.goPreviousStep = function () {
 			self.stepActiveIndex = Math.max(0, self.stepActiveIndex - 1)
 		}
 		
-		$rootScope.$on('main-form:show-next', function (e) {
+		$rootScope.$on('main-form:go-next', function (e) {
 			e.stopPropagation()
-			window.scrollTo(0, 0)
-			self.showNextStep()
+			$window.scrollTo(0, 0)
+			self.goNextStep()
 		})
 		
-		$rootScope.$on('main-form:show-previous', function (e) {
+		$rootScope.$on('main-form:go-previous', function (e) {
 			e.stopPropagation()
-			window.scrollTo(0, 0)
-			self.showPreviousStep()
+			$window.scrollTo(0, 0)
+			self.goPreviousStep()
 		})
 		
 	}
 ])
 
 .controller('PersonalDetailsController', [
-	'$rootScope', 'MainFormService',
-	function ($rootScope, MainFormService) {
+	'$rootScope', 'MainFormService', 'moment',
+	function ($rootScope, MainFormService, moment) {
 		var vm = this
+		
+		var formKeys = [
+			'firstName',
+			'lastName',
+			'dateOfBirth',
+			'emailAddress',
+		]
 		
 		vm.momentPicker = {
 			dateOfBirth: {
@@ -57,23 +65,14 @@ angular.module('NgFormTest')
 		
 		vm.submit = vmFormSubmit
 		
-		var formKeys = [
-			'firstName',
-			'lastName',
-			'dateOfBirth',
-			'emailAddress',
-		]
-		
-		init()
+		vmInit()
 		
 		// ========================================
 		
-		function init () {
+		function vmInit () {
 			MainFormService.getStepData(1).then(function (data) {
 				if (data) {
-					for (var key in data) {
-						vm[key] = data[key]
-					}
+					angular.extend(vm, data)
 				}
 			})
 		}
@@ -86,7 +85,7 @@ angular.module('NgFormTest')
 				}
 				
 				MainFormService.setStepData(1, formData)
-				$rootScope.$emit('main-form:show-next')
+				$rootScope.$emit('main-form:go-next')
 			}
 			
 		}
@@ -95,48 +94,179 @@ angular.module('NgFormTest')
 ])
 
 .controller('VehicleDetailsController', [
-	'$rootScope', 'Vehicle',
-	function ($rootScope, Vehicle) {
+	'$rootScope', 'Vehicle', 'createNumberMask', 'MainFormService',
+	function ($rootScope, Vehicle, createNumberMask, MainFormService) {
 		var vm = this
 		
-		vm.brand = ''
-		vm.model = ''
-		
-		vm.opt = {
-			brand: [],
-			model: [],
+		var vehicleModel = {
+			brand: '',
+			model: '',
+			carValue: '',
+			carPlate: '',
+			opt: {
+				brand: [],
+				model: [],
+			},
 		}
 		
-		vm.goBack = function () {
-			$rootScope.$emit('main-form:show-previous')
+		var formKeys = [
+			'brand',
+			'model',
+			'carValue',
+			'carPlate',
+		]
+		
+		vm.vehicleVmList = []
+		
+		vm.mask = {
+			carValue: {
+				'mask': createNumberMask.forDecimal(),
+			}
 		}
 		
-		vm.brandChange = function () {
-			vm.model = ''
-			vm.opt.model = []
-			
-			Vehicle.$getModels({name: vm.brand}).then(function (data) {
-				for (var i=0; i<data.length; i++) {
-					data[i] = {
-						'name': data[i]
+		vm.goBack = vmGoBack
+		
+		vm.brandChange = vmBrandChange
+		
+		vm.addVehicle = vmAddVehicle
+		vm.addVehicleDisabled = false
+		vm.removeVehicle = vmRemoveVehicle
+		vm.removeVehicleDisabled = true
+		
+		vm.submit = vmFormSubmit
+		
+		vmInit()
+		
+		// ========================================
+		
+		function vmFormSubmit (form) {
+			if (form.$valid) {
+				var formDataList = []
+				for (var i=0; i<vm.vehicleVmList.length; i++) {
+					var formData = {}
+					
+					for (var j=0; j<formKeys.length; j++) {
+						formData[formKeys[j]] = vm.vehicleVmList[i][formKeys[j]]
 					}
+					
+					formDataList.push(formData)
 				}
 				
-				vm.opt.model = data
+				MainFormService.setStepData(2, formDataList)
+				$rootScope.$emit('main-form:go-next')
+			}
+		}
+		
+		function vmGoBack () {
+			$rootScope.$emit('main-form:go-previous')
+		}
+		
+		function vmBrandChange (vehicleVm, vehicleModelValue) {
+			vehicleVm.model = ''
+			vehicleVm.opt.model = []
+			
+			Vehicle.$getModels({id: vehicleVm.brand.id}).then(function (data) {
+				vehicleVm.opt.model = data
+				
+				if (vehicleModelValue) {
+					vehicleVm.model = vehicleModelValue
+				}
 			})
 		}
 		
-		Vehicle.$query().then(function (data) {
-			var optBrand = []
-			
-			for (var i=0; i<data.length; i++) {
-				optBrand.push({
-					'id': data[i]['id'],
-					'name': data[i]['brand'],
-				})
+		function vmAddVehicle (vehicleData) {
+			if (!vm.addVehicleDisabled) {
+				var newVehicleModel = angular.copy(vehicleModel)
+				
+				if (vehicleData) {
+					angular.extend(newVehicleModel, vehicleData)
+					vmBrandChange(newVehicleModel, vehicleData.model)
+				}
+				
+				vm.vehicleVmList.push(newVehicleModel)
 			}
 			
-			vm.opt.brand = optBrand
-		})
+			checkVehicleAction()
+		}
+		
+		function vmRemoveVehicle (index) {
+			if (!vm.removeVehicleDisabled) {
+				vm.vehicleVmList.splice(index, 1)
+			}
+			
+			checkVehicleAction()
+		}
+		
+		function checkVehicleAction () {
+			vm.addVehicleDisabled = (vm.vehicleVmList.length >= 3)
+			vm.removeVehicleDisabled = (vm.vehicleVmList.length == 1)
+		}
+		
+		function vmInit () {
+			MainFormService.getStepData(2).then(function (data) {
+				if (data) {
+					for (var i=0; i<data.length; i++) {
+						vmAddVehicle(data[i])
+					}
+				}
+				else {
+					vmAddVehicle()
+				}
+				
+			})
+			
+			Vehicle.$query().then(function (data) {
+				var optBrand = []
+				
+				for (var i=0; i<data.length; i++) {
+					optBrand.push({
+						'id': data[i]['id'],
+						'brand': data[i]['brand'],
+					})
+				}
+				
+				vehicleModel.opt.brand = optBrand
+				
+				for (var i=0; i<vm.vehicleVmList.length; i++) {
+					vm.vehicleVmList[i].opt.brand = optBrand
+				}
+			})
+			
+		}
+	}
+])
+
+.controller('SummaryController', [
+	'$rootScope', 'MainFormService',
+	function ($rootScope, MainFormService) {
+		var vm = this
+		
+		vm.formData = {}
+		
+		vm.goBack = vmGoBack
+		
+		vm.submit = vmFormSubmit
+		
+		vmInit()
+		
+		// ==============================
+		
+		function vmInit () {
+			MainFormService.getAllStepData().then(function (data) {
+				vm.formData = data
+			})
+		}
+		
+		function vmGoBack () {
+			$rootScope.$emit('main-form:go-previous')
+		}
+		
+		function vmFormSubmit (form) {
+			form.tncAgree.$setValidity('required', (vm.tncAgree === true))
+			
+			if (form.$valid) {
+				
+			}
+		}
 	}
 ])

@@ -3,59 +3,98 @@
 	
 	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta repellat animi eos vitae quos iste neque debitis rem quas expedita distinctio incidunt doloremque cumque dolorem molestias vero, dolorum quia temporibus?</p>
 	
+	<p>Maximum three vehicles, minimum one vehicle.</p>
+	
 	<form name="form" ng-submit="vm.submit(form)" novalidate>
-		<div class="row">
-			<div class="col-12 col-md">
-				<div class="form-group">
-					<label>Car Brand</label>
-					<ui-select ng-model="vm.brand" theme="select2" on-select="vm.brandChange()" name="brand" ng-required="true" class="form-control">
-						<ui-select-match placeholder="Select a car brand">{{$select.selected.name}}</ui-select-match>
-						<ui-select-choices repeat="item.name as item in vm.opt.brand | filter: $select.search">
-							<div ng-bind-html="item.name | highlight: $select.search"></div>
-						</ui-select-choices>
-					</ui-select>
-					<div class="invalid-feedback" ng-messages="form.brand.$error">
-						<div ng-message="required">First Name is required</div>
-					</div>
-					
-				</div>
+		<div class="card mb-3" ng-repeat="vehicleVm in vm.vehicleVmList track by $index">
+			<div class="card-header">
+				<span ng-if="form['brand_' + $index].$viewValue.brand" class="font-weight-bold">
+					{{ form['brand_' + $index].$viewValue.brand }}
+					{{ form['model_' + $index].$viewValue }}
+				</span>
+				<span ng-if="!(form['brand_' + $index].$viewValue.brand)">
+					Vehicle {{ $index + 1 }}
+				</span>
 			</div>
-			<div class="col-12 col-md">
-				<div class="form-group">
-					<label>Car Model</label>
-					<ui-select ng-model="vm.model" theme="select2">
-						<ui-select-match placeholder="Select a car model">{{$select.selected.name}}</ui-select-match>
-						<ui-select-choices repeat="item.name as item in vm.opt.model | filter: $select.search">
-							<div ng-bind-html="item.name | highlight: $select.search"></div>
-						</ui-select-choices>
-					</ui-select>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-12 col-md">
+						<div class="form-group">
+							<label>Car Brand</label>
+							<ui-select ng-model="vehicleVm.brand" theme="select2" on-select="vm.brandChange(vehicleVm)" name="{{ 'brand_' + $index }}" required>
+								<ui-select-match placeholder="Select a car brand">{{ $select.selected.brand }}</ui-select-match>
+								<ui-select-choices repeat="item as item in vehicleVm.opt.brand | filter: $select.search">
+									<div ng-bind-html="item.brand | highlight: $select.search"></div>
+								</ui-select-choices>
+							</ui-select>
+							<div class="invalid-feedback" ng-messages="form['brand_' + $index].$error">
+								<div ng-message="required">Car Brand is required</div>
+							</div>
+							
+						</div>
+					</div>
+					<div class="col-12 col-md">
+						<div class="form-group">
+							<label>Car Model</label>
+							<ui-select ng-model="vehicleVm.model" theme="select2" name="{{ 'model_' + $index }}" required>
+								<ui-select-match placeholder="Select a car model">{{ $select.selected }}</ui-select-match>
+								<ui-select-choices repeat="item as item in vehicleVm.opt.model | filter: $select.search">
+									<div ng-bind-html="item | highlight: $select.search"></div>
+								</ui-select-choices>
+							</ui-select>
+							<div class="invalid-feedback" ng-messages="form['model_' + $index].$error">
+								<div ng-message="required">Car Model is required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-12 col-md">
+						<div class="form-group">
+							<label>Car Value</label>
+							<input type="text" name="{{ 'carValue_' + $index }}" class="form-control" required
+								ng-model="vehicleVm.carValue"
+								text-mask="vm.mask.carValue">
+							
+							<div class="invalid-feedback" ng-messages="form['carValue_' + $index].$error">
+								<div ng-message="required">Car Value is required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-md">
+						<div class="form-group">
+							<label>Car Plate</label>
+							<input type="text" name="{{ 'carPlate_' + $index }}" class="form-control" required
+								ng-model="vehicleVm.carPlate">
+							
+							<div class="invalid-feedback" ng-messages="form['carPlate_' + $index].$error">
+								<div ng-message="required">Car Plate is required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-12 col-sm-4">
+						<button type="button" class="btn btn-block btn-outline-danger" ng-click="vm.removeVehicle($index)" ng-disabled="vm.removeVehicleDisabled">
+							Remove Vehicle
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
 		
 		<div class="row">
-			<div class="col-12 col-md">
-				<div class="form-group">
-					<label>Sum Insured</label>
-					<input type="text" name="firstName" class="form-control" required
-						ng-model="vm.firstName"
-						ng-minlength="5"
-						ng-maxlength="100"
-						ng-pattern="/^[A-z ]+$/"
-						ng-custom-class-on-error="is-invalid">
-					
-					<div class="invalid-feedback" ng-messages="form.firstName.$error">
-						<div ng-message="required">First Name is required</div>
-						<div ng-message="minlength">First Name must be at least 5 characters</div>
-						<div ng-message="maxlength">First Name must be at most 100 characters</div>
-						<div ng-message="pattern">Only alphabets and spaces allowed</div>
-					</div>
-				</div>
+			<div class="col-12 col-sm-4 offset-sm-8 mb-2">
+				<button type="button" class="btn btn-block btn-outline-primary" ng-click="vm.addVehicle()" ng-disabled="vm.addVehicleDisabled">
+					Add Vehicle
+				</button>
 			</div>
 		</div>
+		
+		<step-form-buttons show-previous="true" show-next="true"
+			on-previous="vm.goBack()"></step-form-buttons>
 	</form>
-	
-	<step-form-buttons show-previous="true" show-next="true"
-		on-previous="vm.goBack()"></step-form-button>
 	
 </div>

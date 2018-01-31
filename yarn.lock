@@ -6,6 +6,10 @@ Select2@3.5.x:
   version "3.5.7"
   resolved "https://registry.yarnpkg.com/Select2/-/Select2-3.5.7.tgz#7825b352637655d61ffecdf7416979166163787a"
 
+"accounting@https://github.com/openexchangerates/accounting.js#master":
+  version "0.4.2"
+  resolved "https://github.com/openexchangerates/accounting.js#74a2b12800f0483ffeebf05c00ea52f8dde3ac07"
+
 acorn@^1.0.3:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-1.2.2.tgz#c8ce27de0acc76d896d2b1fad3df588d9e82f014"
@@ -282,6 +286,10 @@ source-map@~0.6.1:
 string_decoder@~0.10.x:
   version "0.10.31"
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
+
+text-mask-addons@3.7.x:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/text-mask-addons/-/text-mask-addons-3.7.1.tgz#8304f5c952533ab76533053e4f90cb4fdaa3995b"
 
 through2@^0.6.2, through2@^0.6.5:
   version "0.6.5"

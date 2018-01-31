@@ -1,23 +1,29 @@
 angular.module('NgFormTest')
 
-.directive('ngCustomClassOnError', [
-	function () {
+.directive('ngCustomShowModal', [
+	'ModalBoxFactory',
+	function (ModalBoxFactory) {
 		return {
 			restrict: 'A',
-			require: '^form',
-			link: function (scope, elem, attrs, form) {
-				scope.$watch(function () {
-					return form[attrs.name].$invalid && (form[attrs.name].$touched || form.$submitted)
-					
-				}, function (isMarkInvalid) {
-					if (isMarkInvalid) {
-						elem.addClass(attrs.ngCustomClassOnError)
-					}
-					else {
-						elem.removeClass(attrs.ngCustomClassOnError)
-					}
+			link: function (scope, elem, attrs) {
+				// console.log(ScrollbarWidthService.get())
+				elem.on('click', function () {
+					ModalBoxFactory.show(attrs.ngCustomShowModal)
 				})
-			},
+				
+			}
+		}
+	}
+])
+
+.directive('ngCustomHideModal', [
+	'ModalBoxFactory',
+	function (ModalBoxFactory) {
+		return {
+			restrict: 'A',
+			link: function (scope, elem, attrs) {
+				elem.on('click', ModalBoxFactory.hide)
+			}
 		}
 	}
 ])

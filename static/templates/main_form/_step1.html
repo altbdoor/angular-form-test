@@ -12,8 +12,7 @@
 						ng-model="vm.firstName"
 						ng-minlength="5"
 						ng-maxlength="100"
-						ng-pattern="/^[A-z ]+$/"
-						ng-custom-class-on-error="is-invalid">
+						ng-pattern="/^[A-z ]+$/">
 					
 					<div class="invalid-feedback" ng-messages="form.firstName.$error">
 						<div ng-message="required">First Name is required</div>
@@ -30,8 +29,7 @@
 						ng-model="vm.lastName"
 						ng-minlength="5"
 						ng-maxlength="100"
-						ng-pattern="/^[A-z ]+$/"
-						ng-custom-class-on-error="is-invalid">
+						ng-pattern="/^[A-z ]+$/">
 					
 					<div class="invalid-feedback" ng-messages="form.lastName.$error">
 						<div ng-message="required">Last Name is required</div>
@@ -72,8 +70,7 @@
 				<div class="form-group">
 					<label>Email Address</label>
 					<input type="email" name="emailAddress" class="form-control" required
-						ng-model="vm.emailAddress"
-						ng-custom-class-on-error="is-invalid">
+						ng-model="vm.emailAddress">
 					
 					<div class="invalid-feedback" ng-messages="form.emailAddress.$error">
 						<div ng-message="required">Email Address is required</div>
@@ -83,6 +80,6 @@
 			</div>
 		</div>
 		
-		<step-form-buttons show-previous="false" show-next="true"></step-form-button>
+		<step-form-buttons show-previous="false" show-next="true"></step-form-buttons>
 	</form>
 </div>

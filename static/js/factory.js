@@ -1,18 +1,36 @@
 angular.module('NgFormTest')
 
 .factory('MainFormService', [
-	'$localForage',
-	function ($localForage) {
+	'$localForage', '$q',
+	function ($localForage, $q) {
 		var lf = $localForage.instance('mainform')
 		var keyPrefix = 'form-data-'
 		
+		var mainFormData = {}
+		
+		function setStepData (step, data) {
+			// lf.setItem(keyPrefix + step, data)
+			mainFormData[keyPrefix + step] = data
+		}
+		
+		function getStepData (step) {
+			// return lf.getItem(keyPrefix + step)
+			return $q.when(mainFormData[keyPrefix + step])
+		}
+		
+		function getAllStepData () {
+			return $q.when(mainFormData)
+		}
+		
+		function toJSON () {
+			
+		}
+		
 		return {
-			setStepData: function (step, data) {
-				lf.setItem(keyPrefix + step, data)
-			},
-			getStepData: function (step) {
-				return lf.getItem(keyPrefix + step)
-			},
+			setStepData: setStepData,
+			getStepData: getStepData,
+			getAllStepData: getAllStepData,
+			toJSON: toJSON,
 		}
 	}
 ])
@@ -47,11 +65,11 @@ angular.module('NgFormTest')
 		
 		function getModels (param) {
 			return $timeout(function () {
-				var brandName = param['brand']
+				var brandId = param['id']
 				var models = []
 				
 				for (var i=0; i<jsonData.length; i++) {
-					if (jsonData[i]['brand'] == brandName) {
+					if (jsonData[i]['id'] == brandId) {
 						models = jsonData[i]['models']
 						break
 					}
@@ -64,6 +82,68 @@ angular.module('NgFormTest')
 		return {
 			$query: query,
 			$getModels: getModels,
+		}
+	}
+])
+
+.factory('ScrollbarWidthService', [
+	function () {
+		var scrollDiv = document.createElement('div')
+		scrollDiv.className = 'modal-scrollbar-measure'
+		document.body.appendChild(scrollDiv)
+		var scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth
+		document.body.removeChild(scrollDiv)
+		
+		return {
+			get: function () { return scrollbarWidth },
+		}
+	}
+])
+
+.factory('ModalBoxFactory', [
+	'ScrollbarWidthService',
+	function (ScrollbarWidthService) {
+		function show (elemId) {
+			var scrollWidth = ScrollbarWidthService.get() + 'px'
+			
+			var modalBox = document.querySelector(elemId)
+			modalBox = angular.element(modalBox)
+			modalBox.addClass('show')
+			modalBox.css({
+				'display': 'block',
+				'padding-right': scrollWidth,
+			})
+			
+			var bodyElem = angular.element(document.body)
+			bodyElem.addClass('modal-open')
+			bodyElem.css('padding-right', scrollWidth)
+			
+			var backdrop = document.createElement('div')
+			backdrop.className = 'modal-backdrop show'
+			document.body.appendChild(backdrop)
+		}
+		
+		function hide () {
+			var backdrop = document.querySelector('.modal-backdrop.show')
+			backdrop = angular.element(backdrop)
+			backdrop.remove()
+			
+			var bodyElem = angular.element(document.body)
+			bodyElem.removeClass('modal-open')
+			bodyElem.css('padding-right', 0)
+			
+			var modalBox = document.querySelector('.modal.show')
+			modalBox = angular.element(modalBox)
+			modalBox.removeClass('show')
+			modalBox.css({
+				'display': 'none',
+				'padding-right': 0,
+			})
+		}
+		
+		return {
+			show: show,
+			hide: hide,
 		}
 	}
 ])

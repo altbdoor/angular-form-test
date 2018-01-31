@@ -26,8 +26,11 @@ angular.module('NgFormTest', [
 ])
 
 .config([
-	'$routeProvider', '$httpProvider', '$translateProvider', 'momentPickerProvider',
-	function ($routeProvider, $httpProvider, $translateProvider, momentPickerProvider) {
+	'$compileProvider', '$routeProvider', '$httpProvider', '$translateProvider', 'momentPickerProvider', 'createNumberMaskProvider',
+	function ($compileProvider, $routeProvider, $httpProvider, $translateProvider, momentPickerProvider, createNumberMaskProvider) {
+		// production setting
+		// $compileProvider.debugInfoEnabled(false)
+		
 		// ng route definitions
 		$routeProvider.otherwise({
 			redirectTo: '/home',
@@ -39,35 +42,55 @@ angular.module('NgFormTest', [
 			templateUrl: 'static/templates/main_form/page.html',
 		})
 		
+		// push our cache buster
+		$httpProvider.interceptors.push('CacheBustService')
+		
+		// get settings from body
+		var bodyElem = angular.element(document.body)
+		
 		// use a static loader
 		$translateProvider.useStaticFilesLoader({
 			prefix: 'static/locale/',
 			suffix: '.json',
 		})
-		$translateProvider.preferredLanguage('en')
+		$translateProvider.preferredLanguage(bodyElem.attr('data-locale'))
 		
 		// use no sanitization. its insane, but we start small
 		$translateProvider.useSanitizeValueStrategy(null)
 		
 		// moment picker
 		momentPickerProvider.options({
-			locale: 'en',
-			format: 'D MMMM YYYY',
+			locale: bodyElem.attr('data-locale'),
+			format: bodyElem.attr('data-date-field-format'),
 			// setOnSelect: true,
 			today: true,
 			leftArrow: '<i class="icon-arrow-left"></i>',
 			rightArrow: '<i class="icon-arrow-right"></i>',
 		})
 		
-		// push our cache buster
-		$httpProvider.interceptors.push('CacheBustService');
+		// defaults for the create number mask in text mask
+		createNumberMaskProvider.setDefaultArgs({
+			prefix: '',
+			suffix: '',
+			includeThousandsSeparator: true,
+			thousandsSeparatorSymbol: bodyElem.attr('data-thousand-symbol'),
+			decimalSymbol: bodyElem.attr('data-decimal-symbol'),
+			decimalLimit: 2,
+			integerLimit: null,
+		})
+		
 	}
 ])
 
 .run([
-	'$localForage',
-	function ($localForage) {
+	'$localForage', 'accounting',
+	function ($localForage, accounting) {
 		$localForage.createInstance({name: 'mainform'})
 		
+		var bodyElem = angular.element(document.body)
+		
+		accounting.settings.number.precision = 2
+		accounting.settings.number.thousand = bodyElem.attr('data-thousand-symbol')
+		accounting.settings.number.decimal = bodyElem.attr('data-decimal-symbol')
 	}
 ])

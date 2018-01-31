@@ -1,0 +1,77 @@
+<div ng-controller="SummaryController as vm">
+	<h2>Step 3: Summary</h2>
+	
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae ad ipsam ducimus placeat. Laboriosam accusantium placeat, culpa ipsam odit eveniet nobis atque, nemo eius ex accusamus. Ipsam voluptatibus nam excepturi.</p>
+	
+	<h4>Personal Details</h4>
+	<table class="table table-bordered">
+		<tr>
+			<th style="width: 30%;">First Name</th>
+			<td>{{ vm.formData['form-data-1'].firstName }}</td>
+		</tr>
+		<tr>
+			<th>Last Name</th>
+			<td>{{ vm.formData['form-data-1'].lastName }}</td>
+		</tr>
+		<tr>
+			<th>Date of Birth</th>
+			<td>{{ vm.formData['form-data-1'].dateOfBirth }}</td>
+		</tr>
+		<tr>
+			<th>Email Address</th>
+			<td>{{ vm.formData['form-data-1'].emailAddress }}</td>
+		</tr>
+	</table>
+	
+	<h4>Vehicle Details</h4>
+	<table class="table table-bordered">
+		<tr>
+			<th>#</th>
+			<th>Car Brand</th>
+			<th>Car Model</th>
+			<th>Car Value</th>
+			<th>Car Plate</th>
+		</tr>
+		<tr ng-repeat="vehicleData in vm.formData['form-data-2']">
+			<td>{{ $index + 1 }}</td>
+			<td>{{ vehicleData.brand.brand }}</td>
+			<td>{{ vehicleData.model }}</td>
+			<td>{{ vehicleData.carValue }}</td>
+			<td>{{ vehicleData.carPlate }}</td>
+		</tr>
+	</table>
+	
+	<form name="form" ng-submit="vm.submit(form)" novalidate>
+		<div class="mb-5">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" name="tncAgree" ng-model="vm.tncAgree" id="form-tnc-agree">
+				<label class="form-check-label" for="form-tnc-agree">
+					I agree to the terms and conditions. Lorem ipsum dolor sit amet, consectetur adipisicing elit. In, pariatur, autem. Excepturi quibusdam deserunt harum officiis beatae tempore voluptate voluptates ea natus illo ab dolorum, nam molestias nesciunt possimus, aspernatur!
+				</label>
+			</div>
+			<div class="alert alert-danger mt-3" ng-show="form.$submitted && form.tncAgree.$error">
+				Please agree with the terms and conditions before proceeding.
+			</div>
+		</div>
+		
+		<button type="button" ng-custom-show-modal="#test-modal">asdds</button>
+		
+		<step-form-buttons show-previous="true" show-next="true"
+			on-previous="vm.goBack()"></step-form-buttons>
+	</form>
+	
+	<div id="test-modal" class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Processing...</h5>
+				</div>
+				<div class="modal-body">
+					<p>Processing your request</p>
+					<a ng-custom-hide-modal>ads</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
