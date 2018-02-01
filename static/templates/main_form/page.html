@@ -1,0 +1,11 @@
+<div class="container pt-5 pb-5" ng-controller="MainFormController as mfCtrl">
+	<h1>Please fill in the form</h1>
+	<hr>
+	
+	<div class="ng-hide" ng-show="mfCtrl.isReady">
+		<div ng-repeat="tmpl in mfCtrl.stepTemplateList track by $index">
+			<div ng-include="tmpl" ng-if="$index === mfCtrl.stepActiveIndex"></div>
+		</div>
+	</div>
+	
+</div>
