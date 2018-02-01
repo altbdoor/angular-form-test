@@ -26,7 +26,7 @@ angular.module('NgFormTest')
 			var jsonFormData = angular.copy(mainFormData)
 			
 			var dateOfBirth = jsonFormData['form-data-1'].dateOfBirth
-			dateOfBirth = moment(dateOfBirth, 'D MMMM YYYY', true).format()
+			dateOfBirth = moment(dateOfBirth, 'D MMMM YYYY', true).toJSON()
 			jsonFormData['form-data-1'].dateOfBirth = dateOfBirth
 			
 			for (var i=0; i<jsonFormData['form-data-2'].length; i++) {
