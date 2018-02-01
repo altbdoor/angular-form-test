@@ -49,26 +49,25 @@
 					I agree to the terms and conditions. Lorem ipsum dolor sit amet, consectetur adipisicing elit. In, pariatur, autem. Excepturi quibusdam deserunt harum officiis beatae tempore voluptate voluptates ea natus illo ab dolorum, nam molestias nesciunt possimus, aspernatur!
 				</label>
 			</div>
-			<div class="alert alert-danger mt-3" ng-show="form.$submitted && form.tncAgree.$error">
+			<div class="alert alert-danger mt-3" ng-show="form.$submitted && form.tncAgree.$error.required">
 				Please agree with the terms and conditions before proceeding.
 			</div>
 		</div>
 		
-		<button type="button" ng-custom-show-modal="#test-modal">asdds</button>
-		
 		<step-form-buttons show-previous="true" show-next="true"
 			on-previous="vm.goBack()"></step-form-buttons>
+			
+		{{ vm.formData|json }}
 	</form>
 	
-	<div id="test-modal" class="modal">
+	<div id="summary-process-modal" class="modal">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Processing...</h5>
 				</div>
 				<div class="modal-body">
-					<p>Processing your request</p>
-					<a ng-custom-hide-modal>ads</a>
+					<p>Processing your request... Please be patient.</p>
 				</div>
 			</div>
 		</div>

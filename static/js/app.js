@@ -41,6 +41,9 @@ angular.module('NgFormTest', [
 		.when('/form', {
 			templateUrl: 'static/templates/main_form/page.html',
 		})
+		.when('/thanks', {
+			templateUrl: 'static/templates/thanks/page.html',
+		})
 		
 		// push our cache buster
 		$httpProvider.interceptors.push('CacheBustService')

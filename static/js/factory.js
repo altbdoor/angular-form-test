@@ -1,8 +1,8 @@
 angular.module('NgFormTest')
 
 .factory('MainFormService', [
-	'$localForage', '$q',
-	function ($localForage, $q) {
+	'$localForage', '$q', '$timeout', 'moment', 'accounting',
+	function ($localForage, $q, $timeout, moment, accounting) {
 		var lf = $localForage.instance('mainform')
 		var keyPrefix = 'form-data-'
 		
@@ -23,7 +23,24 @@ angular.module('NgFormTest')
 		}
 		
 		function toJSON () {
+			var jsonFormData = angular.copy(mainFormData)
 			
+			var dateOfBirth = jsonFormData['form-data-1'].dateOfBirth
+			dateOfBirth = moment(dateOfBirth, 'D MMMM YYYY', true).format()
+			jsonFormData['form-data-1'].dateOfBirth = dateOfBirth
+			
+			for (var i=0; i<jsonFormData['form-data-2'].length; i++) {
+				jsonFormData['form-data-2'][i].brand = jsonFormData['form-data-2'][i].brand.id
+				jsonFormData['form-data-2'][i].carValue = accounting.parse(jsonFormData['form-data-2'][i].carValue)
+			}
+			
+			return $q.when(jsonFormData)
+		}
+		
+		function save () {
+			return $timeout(function () {
+				return true
+			}, 2000)
 		}
 		
 		return {
@@ -31,6 +48,7 @@ angular.module('NgFormTest')
 			getStepData: getStepData,
 			getAllStepData: getAllStepData,
 			toJSON: toJSON,
+			save: save,
 		}
 	}
 ])
@@ -107,38 +125,45 @@ angular.module('NgFormTest')
 			var scrollWidth = ScrollbarWidthService.get() + 'px'
 			
 			var modalBox = document.querySelector(elemId)
-			modalBox = angular.element(modalBox)
-			modalBox.addClass('show')
-			modalBox.css({
-				'display': 'block',
-				'padding-right': scrollWidth,
-			})
 			
-			var bodyElem = angular.element(document.body)
-			bodyElem.addClass('modal-open')
-			bodyElem.css('padding-right', scrollWidth)
-			
-			var backdrop = document.createElement('div')
-			backdrop.className = 'modal-backdrop show'
-			document.body.appendChild(backdrop)
+			if (modalBox) {
+				modalBox = angular.element(modalBox)
+				modalBox.addClass('show')
+				modalBox.css({
+					'display': 'block',
+					'padding-right': scrollWidth,
+				})
+				
+				var bodyElem = angular.element(document.body)
+				bodyElem.addClass('modal-open')
+				bodyElem.css('padding-right', scrollWidth)
+				
+				var backdrop = document.createElement('div')
+				backdrop.className = 'modal-backdrop show'
+				document.body.appendChild(backdrop)
+			}
 		}
 		
 		function hide () {
 			var backdrop = document.querySelector('.modal-backdrop.show')
-			backdrop = angular.element(backdrop)
-			backdrop.remove()
+			if (backdrop) {
+				backdrop = angular.element(backdrop)
+				backdrop.remove()
+			}
 			
 			var bodyElem = angular.element(document.body)
 			bodyElem.removeClass('modal-open')
 			bodyElem.css('padding-right', 0)
 			
 			var modalBox = document.querySelector('.modal.show')
-			modalBox = angular.element(modalBox)
-			modalBox.removeClass('show')
-			modalBox.css({
-				'display': 'none',
-				'padding-right': 0,
-			})
+			if (modalBox) {
+				modalBox = angular.element(modalBox)
+				modalBox.removeClass('show')
+				modalBox.css({
+					'display': 'none',
+					'padding-right': 0,
+				})
+			}
 		}
 		
 		return {

@@ -18,7 +18,7 @@ angular.module('NgFormTest')
 			'static/templates/main_form/_step3.html',
 		]
 		
-		self.stepActiveIndex = 2
+		self.stepActiveIndex = 0
 		self.isReady = true
 		
 		self.goNextStep = function () {
@@ -237,8 +237,8 @@ angular.module('NgFormTest')
 ])
 
 .controller('SummaryController', [
-	'$rootScope', 'MainFormService',
-	function ($rootScope, MainFormService) {
+	'$rootScope', '$location', 'MainFormService', 'ModalBoxFactory',
+	function ($rootScope, $location, MainFormService, ModalBoxFactory) {
 		var vm = this
 		
 		vm.formData = {}
@@ -249,7 +249,7 @@ angular.module('NgFormTest')
 		
 		vmInit()
 		
-		// ==============================
+		// ========================================
 		
 		function vmInit () {
 			MainFormService.getAllStepData().then(function (data) {
@@ -265,8 +265,29 @@ angular.module('NgFormTest')
 			form.tncAgree.$setValidity('required', (vm.tncAgree === true))
 			
 			if (form.$valid) {
-				
+				ModalBoxFactory.show('#summary-process-modal')
+				MainFormService.save().then(function () {
+					ModalBoxFactory.hide()
+					$location.path('/thanks');
+				})
 			}
+		}
+	}
+])
+
+.controller('ThankYouController', [
+	'MainFormService',
+	function (MainFormService) {
+		var vm = this
+		
+		vmInit()
+		
+		// ========================================
+		
+		function vmInit () {
+			MainFormService.toJSON().then(function (data) {
+				vm.formData = JSON.stringify(data, null, '  ')
+			})
 		}
 	}
 ])
