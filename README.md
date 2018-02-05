@@ -1,4 +1,6 @@
 # angular-form-test
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Faltbdoor%2Fangular-form-test.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Faltbdoor%2Fangular-form-test?ref=badge_shield)
+
 
 A somewhat-complex AngularJS form test with a bunch of plugins.
 
@@ -17,3 +19,7 @@ Its not completely done, with bits and stuff missing here and there. Only writte
 - [ui-select](https://github.com/angular-ui/ui-select) to have awesome dropdown
 - [accounting.js](https://github.com/openexchangerates/accounting.js) to manipulate numbers
 - [Simple line icons](https://github.com/thesabbir/simple-line-icons) to show some neat icons
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Faltbdoor%2Fangular-form-test.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Faltbdoor%2Fangular-form-test?ref=badge_large)
