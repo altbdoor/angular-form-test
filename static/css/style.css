@@ -43,14 +43,13 @@
 
 .select2-container .select2-choice .select2-arrow,
 .select2-container .select2-choice .select2-arrow b {
-	background-image: none;
+	background-image: none !important;
 	background-color: transparent;
 }
 .select2-container .select2-choice .select2-arrow {
 	border-color: transparent;
 }
 .select2-container .select2-choice .select2-arrow b {
-	background: none;
 	position: relative;
 }
 .select2-container .select2-choice .select2-arrow b:before {
